@@ -1,0 +1,2 @@
+Growing neural gas written in Racket.
+Change it by adding your own data function.
