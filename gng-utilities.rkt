@@ -96,18 +96,6 @@
   (define (reset-age! edge)
     (set-edge-age! edge 0))
 
-  ;; (define (decrement-edge-count! edge)
-  ;;   (define node1 (edge-node1 edge))
-  ;;   (define node2 (edge-node2 edge))
-  ;;   (set-node-edges-count! node1 (- (node-edges-count node1) 1))
-  ;;   (set-node-edges-count! node2 (- (node-edges-count node2) 1)))
-
-  ;; (define (increment-edge-count! edge)
-  ;;   (define node1 (edge-node1 edge))
-  ;;   (define node2 (edge-node2 edge))
-  ;;   (set-node-edges-count! node1 (+ (node-edges-count node1) 1))
-  ;;   (set-node-edges-count! node2 (+ (node-edges-count node2) 1)))
-
   ;; 8. remove edges whose age is larger than a-max
   ;; returns nodes whose edges were removed
   (define (remove-edges! edges)
@@ -116,12 +104,6 @@
       (define node2 (edge-node2 edge))
       (set-node-edges! node1 (remove edge (node-edges node1)))
       (set-node-edges! node2 (remove edge (node-edges node2)))))
-
-     ;; (remove* (for/list ([edge (in-list emanating-edges)]
-     ;;                     #:when (> (edge-age edge) age-max))
-     ;;            (decrement-edge-count! edge)
-     ;;            edge)
-     ;;          edges))
 
 
   (define (squared-distance x1 x2)
@@ -193,40 +175,5 @@
           (vector id
                   (vector-ref posn 0)
                   (vector-ref posn 1)))))
-
-  ;; draw nodes for better understanding and teaching
-  ;; (define (draw-upon-insertion nodes edges)
-  ;;   ;; find 2 nodes and edges of the first
-  ;;   (define highest-error-node (argmax node-error nodes))
-  ;;   (define emanating-edges (find-emanating-edges edges highest-error-node))
-  ;;   (define highest-error-neighbor
-  ;;     (argmax node-error
-  ;;             (find-neighbors highest-error-node emanating-edges)))
-  ;;   ;; draw first node
-  ;;   (send gng-dc set-brush red-brush)
-  ;;   (let ([posn (node-position (argmax node-error nodes))])
-  ;;     (send gng-dc draw-ellipse
-  ;;           (& posn 0)
-  ;;           (& posn 1)
-  ;;           20 20))
-  ;;   ;; draw edges
-  ;;   (send gng-dc set-pen yellow-pen)
-  ;;   (andmap (lambda (edge)
-  ;;             (let ([posn1 (node-position (edge-node1 edge))]
-  ;;                   [posn2 (node-position (edge-node2 edge))])
-  ;;               (let ([x1 (+ 4 (& posn1 0))]
-  ;;                     [y1 (+ 4 (& posn1 1))]
-  ;;                     [x2 (+ 4 (& posn2 0))]
-  ;;                     [y2 (+ 4 (& posn2 1))])
-  ;;                 (send gng-dc draw-line x1 y1 x2 y2))))
-  ;;           (find-emanating-edges edges (argmax node-error nodes)))
-  ;;   ;; draw second node
-  ;;   (send gng-dc set-brush orange-brush)
-  ;;   (let ([posn (node-position highest-error-neighbor)])
-  ;;     (send gng-dc draw-ellipse
-  ;;           (& posn 0)
-  ;;           (& posn 1)
-  ;;           15 15)))
-
 
   )

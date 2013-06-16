@@ -1,7 +1,4 @@
 ;;; Libraries
-;; (require (planet williams/science/random-distributions/gaussian))
-;; (require (planet williams/science/random-distributions/flat))
-;; (require racket/date)
 (require "gng-utilities.rkt")
 
   ;;; Plotting the progress
@@ -223,22 +220,10 @@
     (create-GNG-network 2 20000 data-fn)
     (run-GNG-aux 1)))
 
-(define data-fn
-  (let* ([c cities]
-         [len (vector-length c)])
-    (lambda ()
-      (define city (vector-ref c (random len)))
-      (vector (vector-ref city 1)
-              (vector-ref city 2)))))
+
 
 (f)
 (send gng-dc set-smoothing 'smoothed)
-
-(time (run-GNG 100000 data-fn))
-(time (send gng-dc clear)
-      (plot-nodes nodes gng-dc 700 700 20000 20000 #:node-size 0))
-
-(csv-write-centroids "centroids_05.txt" (nodes->centroids nodes))
 
 
 ;; random data function
@@ -253,20 +238,8 @@
     (vector (+ (* object displacement) x)
             (+ (* object displacement) y))))
 
-;;     (cond [(= object 0)
-;;            (vector (+ 0 ))
-;;             (vector (random 5000)
-;; p                    (random 5000))]
-;;            [(= object 1)
-;;             (vector (+ 5000 (random 5000))
-;;                     (+ 5000 (random 5000)))]
-;;            [(= object 2)
-;;             (vector (+ 10000 (random 5000))
-;;                     (+ 10000 (random 5000)))]
-;;            [else
-;;             (define magnitude (* 2500 (random)))
-;;             (define angle (/ (* (random 360) pi) 180))
-;;             (define x (* (cos angle) magnitude))
-;;             (define y (* (sin angle) magnitude))
-;;             (vector (+ 15000 x)
-;;                     (+ 15000 y))])))
+(time (run-GNG 100000 data-fn))
+(time (send gng-dc clear)
+      (plot-nodes nodes gng-dc 700 700 20000 20000 #:node-size 0))
+
+
