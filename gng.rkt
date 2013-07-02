@@ -22,7 +22,7 @@
 
 ;; 9. Insert a new unit
 (define (insert-new-node alpha)
-  ;; 9. Find the node with maximum accumulate error
+  ;; 9. Find the node with maximum accumulated error and its edges
   (define highest-error-node (argmax node-error nodes))
   (define emanating-edges (node-edges highest-error-node))
   ;;(find-emanating-edges edges highest-error-node))
@@ -144,7 +144,8 @@
           (insert-new-node alpha))
         (run-GNG-aux (+ n 1))))
     (create-GNG-network 2 20000 data-fn)
-    (run-GNG-aux 1)))
+    (run-GNG-aux 1)
+    (plot-nodes nodes gng-dc 700 700 20000 20000 #:node-size 30)))
 
 
 (define dc (plot-gng "GNG test" 1024 768))
@@ -163,7 +164,7 @@
     (vector (+ (* object displacement) x)
             (+ (* object displacement) y))))
 
-(time (run-GNG 100000 data-fn dc))
+(time (run-GNG 1000 data-fn dc))
 
 (time (send gng-dc clear)
       (plot-nodes nodes gng-dc 700 700 20000 20000 #:node-size 0))
