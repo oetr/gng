@@ -12,7 +12,7 @@
                               (make-node
                                (build-vector dimensionality
                                              (lambda (n) (random rang)))
-                               0.0 ;; error
+                               0.0   ;; error
                                empty ;; edges
                                ))))
   (define initial-edge (make-edge (first nodes) (second nodes) 0))
@@ -81,9 +81,9 @@
         [epsilon-n 0.01] ;; movement fraction for the neighbors of nearest
         [age-max 20] ;; delete an edge after its age is greater than age-max
         [global-error-decrease 0.995])
-    (define two-nearest (find-nearest nodes data))
+    (define two-nearest (find-two-nearest data nodes))
     (define nearest (car two-nearest))
-    (define second-nearest (cdr two-nearest))
+    (define second-nearest (cadr two-nearest))
     ;; 4. Find all emanating edges from nearest node
     (define emanating-edges (node-edges nearest))
     ;; 4. Increment the age of all the edges
@@ -164,7 +164,7 @@
     (vector (+ (* object displacement) x)
             (+ (* object displacement) y))))
 
-(time (run-GNG 1000 data-fn dc))
+(time (run-GNG 1000000 data-fn dc))
 
 (time (send gng-dc clear)
       (plot-nodes nodes gng-dc 700 700 20000 20000 #:node-size 0))

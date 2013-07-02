@@ -11,33 +11,25 @@
 
   ;; 3. search through the GNG list
   ;; find the two nearest nodes and return them in a list
-  (define (find-nearest nodes data)
-    (define f (car nodes))
-    (define s (cadr nodes))
-    (define nearest f)
-    (define second-nearest s)
-    (define m (euclidean-distance-points (node-position f) data))
-    (define sm (euclidean-distance-points (node-position s) data))
-    ;; rearrange so that nearest node has smaller distance to data
-    (when (> m sm)
-      (set! nearest s)
-      (set! second-nearest f)
-      (define temp m)
-      (set! m sm)
-      (set! sm temp))
-    (for ([node (in-list (cddr nodes))]
-          [i (in-range 0 (length nodes))])
-      (define new-distance (euclidean-distance-points (node-position node) data))
-      (cond [(< new-distance m)
-             (set! sm m)
-             (set! m new-distance)
-             (set! second-nearest nearest)
-             (set! nearest node)]
-            [(< new-distance sm)
-             (set! sm new-distance) 
-             (set! second-nearest node)]))
-    (cons nearest second-nearest))
-
+  (define (find-two-nearest data nodes)
+    (let loop ([first-min   0]
+               [second-min  0]
+               [first-node  null]
+               [second-node null]
+               [nodes       nodes])
+      (if (empty? nodes)
+          (list first-node second-node)
+          (let* ([node (car nodes)]
+                 [new-distance (euclidean-distance (node-position node) data)])
+            (cond [(null? first-node)
+                   (loop new-distance 0 node null (cdr nodes))]
+                  [(< new-distance first-min)
+                   (loop new-distance first-min node first-node (cdr nodes))]
+                  [(or (null? second-node) (< new-distance second-min))
+                   (loop first-min new-distance first-node node (cdr nodes))]
+                  [else
+                   (loop first-min second-min first-node
+                         second-node (cdr nodes))])))))
 
   ;; finds the edge from node1 to node2
   (define (find-edge node1 node2 edges)
@@ -49,7 +41,7 @@
                   (and (equal? node2 n1)
                        (equal? node1 n2))))
             edges))
-  
+
   ;; 4. Find emanating edges from s1
   (define (find-emanating-edges edges node)
     (filter (lambda (edge)
@@ -112,11 +104,14 @@
        (sqr (- (vector-ref x2 1)
                (vector-ref x1 1)))))
 
-  (define (euclidean-distance-points x1 x2)
+  (define (euclidean-distance-2d-points x1 x2)
     (sqrt (+ (sqr (- (vector-ref x2 0)
                   (vector-ref x1 0)))
           (sqr (- (vector-ref x2 1)
                   (vector-ref x1 1))))))
+
+  (define (euclidean-distance x1 x2)
+    (sqrt (reduce-vector + 0 (vector-map sqr (vector-map - x1 x2)))))
 
   ;; this can be used in several dimensions
   ;; ;; Squared distance between two vectors
@@ -127,7 +122,7 @@
   ;; (define (euclidean-distance x1 x2)
   ;;   (sqrt (reduce-vector + 0 (vector-map sqr (vector-map - x2 x1)))))
 
-  ;; reduce-vector: fn ? vector -> ?
+  ;; reduce-vector: fn N vector -> N
   ;; to reduce the vector by subsequently applying the operator "fn"
   ;; starting in the initial state "start"
   (define (reduce-vector fn start vector)
