@@ -7,7 +7,7 @@
   ;; position is a vector of real values
   ;; error is a scalar value
   (define-struct node (position error edges) #:mutable)
-  (define-struct edge (node1 node2 age) #:mutable)
+  (define-struct edge (node1 node2 age)      #:mutable)
 
   ;; 3. search through the GNG list
   ;; find the two nearest nodes and return them in a list
@@ -40,13 +40,6 @@
                        (equal? node2 n2))
                   (and (equal? node2 n1)
                        (equal? node1 n2))))
-            edges))
-
-  ;; 4. Find emanating edges from s1
-  (define (find-emanating-edges edges node)
-    (filter (lambda (edge)
-              (or (equal? (edge-node1 edge) node)
-                  (equal? (edge-node2 edge) node)))
             edges))
 
   ;; 4. increment the age of an edge
@@ -82,7 +75,7 @@
                            (vector-mul (vector-process - x (node-position node)) epsilon)))))
 
   ;; 7. set the age of the edge to zero, or create if edge nonexistent
-  ;;(define (insert-or-update-edge node1 node2 edges))
+  ;; (define (insert-or-update-edge node1 node2 edges))
 
   ;; 4. set the age to zero
   (define (reset-age! edge)
@@ -98,7 +91,13 @@
       (set-node-edges! node2 (remove edge (node-edges node2)))))
 
 
+  (define (euclidean-distance x1 x2)
+    (sqrt (reduce-vector + 0 (vector-map sqr (vector-map - x1 x2)))))
+  
   (define (squared-distance x1 x2)
+    (reduce-vector + 0 (vector-map sqr (vector-map - x2 x1))))
+
+  (define (squared-2d-distance x1 x2)
     (+ (sqr (- (vector-ref x2 0)
                (vector-ref x1 0)))
        (sqr (- (vector-ref x2 1)
@@ -110,13 +109,7 @@
           (sqr (- (vector-ref x2 1)
                   (vector-ref x1 1))))))
 
-  (define (euclidean-distance x1 x2)
-    (sqrt (reduce-vector + 0 (vector-map sqr (vector-map - x1 x2)))))
-
-  ;; this can be used in several dimensions
-  ;; ;; Squared distance between two vectors
-  ;; (define (squared-distance x1 x2)
-  ;;   (reduce-vector + 0 (vector-map sqr (vector-map - x2 x1))))
+  
 
   ;; ;; Squared distance between two vectors
   ;; (define (euclidean-distance x1 x2)

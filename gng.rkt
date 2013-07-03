@@ -25,7 +25,6 @@
   ;; 9. Find the node with maximum accumulated error and its edges
   (define highest-error-node (argmax node-error nodes))
   (define emanating-edges (node-edges highest-error-node))
-  ;;(find-emanating-edges edges highest-error-node))
   (define highest-error-neighbor
     (argmax node-error (find-neighbors highest-error-node emanating-edges)))
   ;; 9. Decrease the error of node and its neighbors
@@ -77,9 +76,9 @@
 ;; final algorithm
 (define (GNG-update data)
   ;; 3. find the nearest
-  (let ([epsilon-b 1.0] ;; movement fraction for the nearest
+  (let ([epsilon-b 1.0]  ;; movement fraction for the nearest
         [epsilon-n 0.01] ;; movement fraction for the neighbors of nearest
-        [age-max 20] ;; delete an edge after its age is greater than age-max
+        [age-max   20]   ;; delete an edge after its age is greater than age-max
         [global-error-decrease 0.995])
     (define two-nearest (find-two-nearest data nodes))
     (define nearest (car two-nearest))
@@ -92,7 +91,7 @@
     (set-node-error! nearest (squared-distance (node-position nearest) data))
     ;; find neighbors
     (define neighbors (find-neighbors nearest emanating-edges))
-    ;;(printf "neighbors ~a~n" neighbors)
+    ;; (printf "neighbors ~a~n" neighbors)
     (map (lambda (node) (set-node-error! node
                                     (squared-distance (node-position node) data)))
          neighbors)
@@ -121,13 +120,12 @@
     (andmap (lambda (node)
               (set-node-error! node (* (node-error node)
                                        global-error-decrease)))
-            nodes)
-    ))
+            nodes)))
 
 (define (run-GNG n-times data-fn gng-dc)
   (let ([node-insertion-interval 100]
-        [alpha 0.0]
-        [n-max 3000])
+        [alpha 0.3]
+        [n-max 100])
     (define (run-GNG-aux n)
       (when (< n n-times)
         (define data (data-fn))        
@@ -145,7 +143,7 @@
         (run-GNG-aux (+ n 1))))
     (create-GNG-network 2 20000 data-fn)
     (run-GNG-aux 1)
-    (plot-nodes nodes gng-dc 700 700 20000 20000 #:node-size 30)))
+    (plot-nodes nodes gng-dc 700 700 20000 20000 #:node-size 10)))
 
 
 (define dc (plot-gng "GNG test" 1024 768))
@@ -164,7 +162,7 @@
     (vector (+ (* object displacement) x)
             (+ (* object displacement) y))))
 
-(time (run-GNG 1000000 data-fn dc))
+(time (run-GNG 200000 data-fn dc))
 
-(time (send gng-dc clear)
+(time (send dc clear)
       (plot-nodes nodes gng-dc 700 700 20000 20000 #:node-size 0))
