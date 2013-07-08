@@ -1,3 +1,4 @@
+
 An implementation of [[http://web.cs.swarthmore.edu/~meeden/DevelopmentalRobotics/fritzke95.pdf][growing neural gas]] (pdf) in [[http://racket-lang.org/][Racket]].
 Growing neural gas is used for reducing the size of a dataset by clustering it.
 It starts with a network of two units.
@@ -5,11 +6,33 @@ While it is run through the whole dataset, the units are slowly moving towards t
 With time the network gets bigger, since new units are regularly added to the network.
 
 
+* Parameters
 Several parameters are used to configure the network:
 - /epsilon-b/ --- movement fraction for the nearest unit.
 - /epsilon-n/ --- movement fraction for the neighbors of the nearest unit.
-- /age-max/ --- maximum age of an edge. An edge is removed if it exceeds age_{max}.
+- /age-max/ --- maximum age of an edge. An edge is removed if it exceeds /age-max/.
 - /global-error-decrease/ --- the error of each unit is decreased by this amount after every step.
 - /unit-insertion-interval/ --- a new unit is inserted after this amount of steps.
 - /alpha/ --- upon insertion of a new unit, the error of the nearest unit and its neighbor is decreased by this amount.
 - /n-max/ --- maximum number of units in the network.
+
+
+
+* Example: Random Distribution
+Here is an example GNG application on circular random distribution.
+Network parameters are as follows:
+| /epsilon-b/               |   0.2 |
+| /epsilon-n/               | 0.006 |
+| /age-max/                 |    50 |
+| /global-error-decrease/   | 0.995 |
+| /unit-insertion-interval/ |   100 |
+| /alpha/                   |   0.5 |
+| /n-max/                   |  1000 |
+
+And here are the results:
+#+CAPTION: After 25000 Iterations
+#+ATTR_HTML: :alt cat/spider image :title Action! :align right
+[[./pics/25000.png]]
+
+
+

@@ -1,3 +1,4 @@
+;; Author: Peter Samarin
 (module plotting racket/gui
   (require "gng-utilities.rkt")
   
@@ -45,6 +46,7 @@
   ;; Make some pens and brushes
   (define color-gray200 (make-object color% 200 200 200))
   (define brush-gray200 (make-object brush% color-gray200 'solid))
+  (define brush-white   (make-object brush% "WHITE" 'solid))
   (define no-pen        (make-object pen% "BLACK" 1 'transparent))
   (define no-brush      (make-object brush% "BLACK" 'transparent))
   (define blue-brush    (make-object brush% "BLUE" 'solid))
@@ -77,5 +79,17 @@
     ;; Wait a second to let the window get ready
     (sleep/yield 1)
     gng-dc)
+
+  (provide gng-snapshot)
+  (define (gng-snapshot dc file)
+    (define-values (w h) (send dc get-size))
+    (define bm (make-bitmap w h))
+    (define bdc (new bitmap-dc% [bitmap bm]))
+    (send bdc set-smoothing 'smoothed)
+    (send bdc set-brush brush-white)
+    (send bdc draw-rectangle 0 0 w h)
+    (draw-units units bdc 700 700 20000 20000 #:unit-size 10)
+    (send bm save-file file 'png))
   
+
   )

@@ -1,4 +1,4 @@
-;;; Libraries
+;; Author: Peter Samarin
 (require "plotting.rkt")
 (require "gng-utilities.rkt")
 
@@ -76,9 +76,9 @@
 ;; final algorithm
 (define (GNG-update data)
   ;; 3. find the nearest
-  (let ([epsilon-b 1.0]  ;; movement fraction for the nearest
-        [epsilon-n 0.01] ;; movement fraction for the neighbors of nearest
-        [age-max   20]   ;; delete an edge after its age is greater than age-max
+  (let ([epsilon-b 0.2]  ;; movement fraction for the nearest
+        [epsilon-n 0.006] ;; movement fraction for the neighbors of nearest
+        [age-max   50]   ;; delete an edge after its age is greater than age-max
         [global-error-decrease 0.995])
     (define two-nearest (find-two-nearest data units))
     (define nearest (car two-nearest))
@@ -124,8 +124,8 @@
 
 (define (run-GNG n-times data-fn gng-dc)
   (let ([unit-insertion-interval 100]
-        [alpha 0.3]
-        [n-max 100])
+        [alpha 0.5]
+        [n-max 1000])
     (define (run-GNG-aux n)
       (when (< n n-times)
         (define data (data-fn))        
@@ -136,13 +136,15 @@
         (when (zero? (remainder (+ n 1) 1000))
           (send gng-dc clear)
           (draw-units units gng-dc 700 700 20000 20000 #:unit-size 8)
-          (draw-data-point data gng-dc 700 700 20000 20000))
+          ;;(draw-data-point data gng-dc 700 700 20000 20000)
+          )
         (when (and (< (length units) n-max)
                    (zero? (remainder n unit-insertion-interval)))
           (insert-new-unit alpha))
         (run-GNG-aux (+ n 1))))
     (create-GNG-network 2 20000 data-fn)
     (run-GNG-aux 1)
+    (send gng-dc clear)
     (draw-units units gng-dc 700 700 20000 20000 #:unit-size 10)))
 
 
@@ -162,7 +164,14 @@
     (vector (+ (* object displacement) x)
             (+ (* object displacement) y))))
 
-(time (run-GNG 200000 data-fn dc))
+(time (run-GNG 25000 data-fn dc))
+(gng-snapshot dc "pics/25000.png")
+(time (run-GNG 50000 data-fn dc))
+(gng-snapshot dc "pics/50000.png")
+(time (run-GNG 75000 data-fn dc))
+(gng-snapshot dc "pics/75000.png")
+(time (run-GNG 100000 data-fn dc))
+(gng-snapshot dc "pics/100000.png")
 
-(time (send dc clear)
-      (draw-units units gng-dc 700 700 20000 20000 #:unit-size 0))
+
+

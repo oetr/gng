@@ -1,3 +1,5 @@
+;; Author: Peter Samarin
+
 (module gng-utilities racket
   (provide (all-defined-out))
 
