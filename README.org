@@ -1,9 +1,9 @@
-
 An implementation of [[http://web.cs.swarthmore.edu/~meeden/DevelopmentalRobotics/fritzke95.pdf][growing neural gas]] (pdf) in [[http://racket-lang.org/][Racket]].
 Growing neural gas is used for reducing the size of a dataset by clustering it.
 It starts with a network of two units.
 While it is run through the whole dataset, the units are slowly moving towards the data points.
 With time the network gets bigger, since new units are regularly added to the network.
+
 
 
 * Parameters
@@ -19,7 +19,10 @@ Several parameters are used to configure the network:
 
 
 * Example: Random Distribution
-Here is an example GNG application on circular random distribution.
+Here is an example GNG application on circular random distribution after a different number of iterations:
+[[./pics/AnExample.png]]
+
+
 Network parameters are as follows:
 | /epsilon-b/               |   0.2 |
 | /epsilon-n/               | 0.006 |
@@ -28,11 +31,4 @@ Network parameters are as follows:
 | /unit-insertion-interval/ |   100 |
 | /alpha/                   |   0.5 |
 | /n-max/                   |  1000 |
-
-And here are the results:
-#+CAPTION: After 25000 Iterations
-#+ATTR_HTML: :alt cat/spider image :title Action! :align right
-[[./pics/25000.png]]
-
-
 
