@@ -6,10 +6,10 @@ With time the network gets bigger, since new units are regularly added to the ne
 
 
 Several parameters are used to configure the network:
-- epsilon_b --- movement fraction for the nearest unit.
-- epsilon_n --- movement fraction for the neighbors of the nearest unit.
-- age_{max} --- maximum age of an edge. An edge is removed if it exceeds age_{max}.
+- /epsilon-b/ --- movement fraction for the nearest unit.
+- /epsilon-n/ --- movement fraction for the neighbors of the nearest unit.
+- /age-max/ --- maximum age of an edge. An edge is removed if it exceeds age_{max}.
 - /global-error-decrease/ --- the error of each unit is decreased by this amount after every step.
 - /unit-insertion-interval/ --- a new unit is inserted after this amount of steps.
-- alpha --- upon insertion of a new unit, the error of the nearest unit and its neighbor is decreased by this amount.
-- n-max --- maximum number of units in the network.
+- /alpha/ --- upon insertion of a new unit, the error of the nearest unit and its neighbor is decreased by this amount.
+- /n-max/ --- maximum number of units in the network.
