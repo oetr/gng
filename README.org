@@ -1,2 +1,15 @@
-Growing neural gas written in Racket.
-Change it by adding your own data function.
+An implementation of [[http://web.cs.swarthmore.edu/~meeden/DevelopmentalRobotics/fritzke95.pdf][growing neural gas]] (pdf) in [[http://racket-lang.org/][Racket]].
+Growing neural gas is used for reducing the size of a dataset by clustering it.
+It starts with a network of two units.
+While it is run through the whole dataset, the units are slowly moving towards the data points.
+With time the network gets bigger, since new units are regularly added to the network.
+
+
+Several parameters are used to configure the network:
+- epsilon_b --- movement fraction for the nearest unit.
+- epsilon_n --- movement fraction for the neighbors of the nearest unit.
+- age_{max} --- maximum age of an edge. An edge is removed if it exceeds age_{max}.
+- /global-error-decrease/ --- the error of each unit is decreased by this amount after every step.
+- /unit-insertion-interval/ --- a new unit is inserted after this amount of steps.
+- alpha --- upon insertion of a new unit, the error of the nearest unit and its neighbor is decreased by this amount.
+- n-max --- maximum number of units in the network.
